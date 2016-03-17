@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.joey.keepbook.view.HeadView
+            android:id="@+id/hv_add_new_bill"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <TextView
+            style="@style/head_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="添加新账本" />
+    </RelativeLayout>
+    <!--<TextView-->
+        <!--android:textSize="@dimen/text_size_body"-->
+        <!--android:text="请输入账本名称"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content" />-->
+    <EditText
+        android:id="@+id/et_add_new_bill"
+        android:hint="请输入账本名称"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:id="@+id/ll_add_new_bill"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp">
+
+        <Button
+            android:layout_gravity="bottom"
+            android:id="@+id/bt_add_new_bill_cancel"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn_red"
+            android:text="取消"
+            android:textSize="22sp" />
+
+        <Button
+            android:layout_gravity="bottom"
+            android:id="@+id/bt_add_new_bill_ok"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn_red"
+            android:text="保存"
+            android:textSize="22sp" />
+    </LinearLayout>
+
+</LinearLayout>

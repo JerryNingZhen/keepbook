@@ -1,0 +1,138 @@
+<com.joey.keepbook.view.FractionTranslateLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/translate_home"
+    android:background="@mipmap/ico_home_add_bg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="7">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/bg_daily" />
+        <TextView
+            android:id="@+id/tv_home_title"
+            style="@style/home_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="我的账单" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/ll_btn"
+            android:layout_marginBottom="20dp">
+
+            <com.joey.keepbook.view.TotalAmountTextView
+                android:id="@+id/tav_total_in"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                app:double_text_text_first="0.00"
+                app:double_text_text_second="本月收入" />
+
+            <com.joey.keepbook.view.TotalAmountTextView
+                android:id="@+id/tav_total_out"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                app:double_text_text_first="0.00"
+                app:double_text_text_second="本月支出" />
+
+            <com.joey.keepbook.view.TotalAmountTextView
+                android:id="@+id/tav_total_residue"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                app:double_text_text_first="0.00"
+                app:double_text_text_second="本月结存" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_btn"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp">
+
+            <Button
+                android:id="@+id/bt_home_book_note"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="10"
+                android:background="@drawable/btn_home_note_left"
+                android:text="记一笔"
+                android:textSize="@dimen/text_size_title" />
+
+            <Button
+                android:id="@+id/bt_home_book_note_quick"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/btn_home_note_right"
+                android:text="速记"
+                android:textSize="@dimen/text_size_body_small" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_weight="5"
+        android:orientation="vertical">
+
+        <com.joey.keepbook.view.HomeBodyView
+            android:id="@+id/dv_one_day_out"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            app:image_two_text_src_first="@mipmap/ico_detail_one_day"
+            app:image_two_text_text_first="今日支出"
+            app:image_two_text_text_second="未消费" />
+
+        <com.joey.keepbook.view.HomeBodyView
+            android:id="@+id/dv_one_day_in"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            app:image_two_text_src_first="@mipmap/ico_detail_calendar"
+            app:image_two_text_text_first="今日收入"
+            app:image_two_text_text_second="未消费" />
+
+        <com.joey.keepbook.view.HomeBodyView
+            android:id="@+id/dv_one_day_residue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            app:image_two_text_src_first="@mipmap/ico_detail_invest"
+            app:image_two_text_text_first="今日结存"
+            app:image_two_text_text_second="未消费" />
+
+        <com.joey.keepbook.view.HomeBodyView
+            android:id="@+id/dv_helper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            app:image_two_text_src_first="@mipmap/ico_detail_helper"
+            app:image_two_text_text_first="天天帮助"
+            app:image_two_text_text_second="未消费" />
+    </LinearLayout>
+</com.joey.keepbook.view.FractionTranslateLayout>
+

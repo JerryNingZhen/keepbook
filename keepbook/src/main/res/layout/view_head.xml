@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="50dp">
+
+    <ImageView android:clickable="false" android:focusable="false"
+        android:layout_width="match_parent" android:layout_height="match_parent"
+        android:background="@mipmap/bg_red_head" />
+    <RelativeLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_centerVertical="true">
+        <ImageView android:focusable="false" android:clickable="false"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true" android:layout_centerVertical="true"
+            android:src="@mipmap/ico_white_back" />
+        <Button android:id="@+id/bt_view_head" android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true" android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:alpha="0.5"
+            android:background="@drawable/btn_head_back" />
+    </RelativeLayout>
+</RelativeLayout>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.joey.keepbook.view.FractionTranslateLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/ico_home_add_bg">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/tv_home_left_title"
+            android:text="本月汇总"
+            style="@style/home_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <RelativeLayout
+            android:layout_marginTop="100dp"
+            android:layout_centerHorizontal="true"
+            android:layout_width="100dp"
+            android:layout_height="100dp">
+            <Button
+                android:id="@+id/bt_home_right_add"
+                android:background="@drawable/btn_home_right_add"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+            <ImageView
+                android:src="@mipmap/ico_home_add"
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+</com.joey.keepbook.view.FractionTranslateLayout>

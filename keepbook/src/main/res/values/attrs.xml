@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="TotalView">
+        <attr name="total_money" format="string" />
+        <attr name="total_desc" format="string" />
+    </declare-styleable>
+    <declare-styleable name="DetailView">
+        <attr name="detail_desc" format="string" />
+        <attr name="detail_result" format="string" />
+        <attr name="detail_src" format="reference|integer" />
+    </declare-styleable>
+    <declare-styleable name="MainView">
+        <attr name="main_desc" format="string" />
+        <attr name="main_src" format="reference|integer" />
+    </declare-styleable>
+    <declare-styleable name="DoubleTextView">
+        <attr name="double_text_text_second" format="string" />
+        <attr name="double_text_text_first" format="string" />
+    </declare-styleable>
+    <declare-styleable name="ImageTwoTextView">
+        <attr name="image_two_text_text_first" format="string" />
+        <attr name="image_two_text_text_second" format="string" />
+        <attr name="image_two_text_src_first" format="reference|integer"/>
+    </declare-styleable>
+</resources>

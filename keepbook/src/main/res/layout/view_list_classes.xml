@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:focusable="false"
+        android:clickable="false"
+        android:textColor="@color/black"
+        android:id="@+id/bt_view_list_classes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/btn_white"
+        android:text="午餐"
+        android:textSize="28sp" />
+</RelativeLayout>

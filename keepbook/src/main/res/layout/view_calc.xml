@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="200dp">
+
+    <LinearLayout android:layout_width="0dp" android:layout_height="match_parent"
+        android:layout_weight="1" android:orientation="vertical">
+
+        <Button android:id="@+id/bt_calc_1" style="@style/calc_button"
+            android:layout_width="match_parent" android:layout_height="0dp"
+            android:layout_weight="1" android:text="1" />
+
+        <ImageView android:layout_width="match_parent" android:layout_height="1dp"
+            android:background="@color/white" />
+
+        <Button android:id="@+id/bt_calc_4" style="@style/calc_button"
+            android:layout_width="match_parent" android:layout_height="0dp"
+            android:layout_weight="1" android:text="4" />
+
+        <ImageView android:layout_width="match_parent" android:layout_height="1dp"
+            android:background="@color/white" />
+
+        <Button android:id="@+id/bt_calc_7" style="@style/calc_button"
+            android:layout_width="match_parent" android:layout_height="0dp"
+            android:layout_weight="1" android:text="7" />
+
+        <ImageView android:layout_width="match_parent" android:layout_height="1dp"
+            android:background="@color/white" />
+
+        <Button android:id="@+id/bt_calc_point" style="@style/calc_button"
+            android:layout_width="match_parent" android:layout_height="0dp"
+            android:layout_weight="1" android:text="." />
+    </LinearLayout>
+
+    <ImageView android:layout_width="1dp" android:layout_height="match_parent"
+        android:background="@color/white" />
+
+    <LinearLayout android:layout_width="0dp" android:layout_height="match_parent"
+        android:layout_weight="1" android:orientation="vertical">
+
+        <Button android:id="@+id/bt_calc_2" style="@style/calc_button"
+            android:layout_width="match_parent" android:layout_height="0dp"
+            android:layout_weight="1" android:text="2" />
+
+        <ImageView android:layout_width="match_parent" android:layout_height="1dp"
+            android:background="@color/white" />
+
+        <Button android:id="@+id/bt_calc_5"
+
+            style="@style/calc_button" android:layout_width="match_parent"
+            android:layout_height="0dp" android:layout_weight="1" android:text="5" />
+
+        <ImageView android:layout_width="match_parent" android:layout_height="1dp"
+            android:background="@color/white" />
+
+        <Button android:id="@+id/bt_calc_8" style="@style/calc_button"
+            android:layout_width="match_parent" android:layout_height="0dp"
+            android:layout_weight="1" android:text="8" />
+
+        <ImageView android:layout_width="match_parent" android:layout_height="1dp"
+            android:background="@color/white" />
+
+        <Button android:id="@+id/bt_calc_0" style="@style/calc_button"
+            android:layout_width="match_parent" android:layout_height="0dp"
+            android:layout_weight="1" android:text="0" />
+    </LinearLayout>
+    <ImageView android:layout_width="1dp" android:layout_height="match_parent"
+        android:background="@color/white" />
+    <LinearLayout android:layout_width="0dp" android:layout_height="match_parent"
+        android:layout_weight="1" android:orientation="vertical">
+
+        <Button android:id="@+id/bt_calc_3" style="@style/calc_button"
+            android:layout_width="match_parent" android:layout_height="0dp"
+            android:layout_weight="1" android:text="3" />
+
+        <ImageView android:layout_width="match_parent" android:layout_height="1dp"
+            android:background="@color/white" />
+
+        <Button android:id="@+id/bt_calc_6" style="@style/calc_button"
+            android:layout_width="match_parent" android:layout_height="0dp"
+            android:layout_weight="1" android:text="6" />
+
+        <ImageView android:layout_width="match_parent" android:layout_height="1dp"
+            android:background="@color/white" />
+
+        <Button android:id="@+id/bt_calc_9" style="@style/calc_button"
+            android:layout_width="match_parent" android:layout_height="0dp"
+            android:layout_weight="1" android:text="9" />
+
+        <ImageView android:layout_width="match_parent" android:layout_height="1dp"
+            android:background="@color/white" />
+
+        <RelativeLayout android:layout_width="match_parent" android:layout_height="0dp"
+            android:layout_weight="1">
+            <Button android:id="@+id/bt_calc_as" style="@style/calc_button"
+                android:layout_width="match_parent" android:layout_height="match_parent" />
+            <ImageView android:focusable="false" android:clickable="false"
+                android:layout_centerInParent="true" android:src="@mipmap/btn_calc_as"
+                android:layout_width="30dp" android:layout_height="30dp" />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <ImageView android:layout_width="1dp" android:layout_height="match_parent"
+        android:background="@color/white" />
+
+    <LinearLayout android:layout_width="0dp" android:layout_height="match_parent"
+        android:layout_weight="1" android:orientation="vertical">
+
+        <Button android:id="@+id/bt_calc_delete" style="@style/calc_button"
+            android:layout_width="match_parent" android:layout_height="0dp"
+            android:layout_weight="1" android:text="删除" />
+
+        <ImageView android:layout_width="match_parent" android:layout_height="1dp"
+            android:background="@color/white" />
+
+        <Button android:id="@+id/bt_calc_ok" style="@style/calc_button"
+            android:layout_width="match_parent" android:layout_height="0dp"
+            android:layout_weight="1" android:text="确定" />
+    </LinearLayout>
+</LinearLayout>

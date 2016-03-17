@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.joey.keepbook.view.HeadView
+            android:id="@+id/hv_activity_book"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            style="@style/head_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="记一笔" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal">
+
+        <Button
+            android:id="@+id/bt_book_in"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="收入" />
+
+        <Button
+            android:id="@+id/bt_book_out"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="支出" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:id="@+id/fg_book"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <com.joey.keepbook.view.CalcView
+            android:id="@+id/cv_activity_book"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true" />
+    </RelativeLayout>
+</LinearLayout>
