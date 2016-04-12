@@ -12,7 +12,7 @@ import com.joey.keepbook.db.dao.BillDao;
 import com.joey.keepbook.db.dao.ClassesDao;
 import com.joey.keepbook.db.dao.PageDao;
 import com.joey.keepbook.listener.IReadyListener;
-import com.joey.keepbook.utils.DateUtils;
+import com.joey.keepbook.utils.DateManger;
 import com.joey.keepbook.utils.LogUtils;
 import com.joey.keepbook.utils.PrefUtils;
 import com.joey.keepbook.utils.TraversalUtils;
@@ -78,28 +78,7 @@ public class CacheManager implements ICacheModel {
 
     //第一次启动，初始化数据 将数据保存至 pref
     private void firstLaunch() {
-        LogUtils.e("第一次启动应用，进行初始化，执行 firstLaunch()");
-        //保存 chart cache 至pref
-//        ChartCache chartCache = (ChartCache) getDefaultCache(CHART_CACHE);
-//        saveChartCacheToPref(chartCache);
-//        //测试用
-//        float[] f1 = new float[60];
-//        float[] f2 = new float[60];
-//        for (int i = 0; i < 60; i++) {
-//            f1[i] = i + 5;
-//            f2[i] = i + 20;
-//        }
-//        chartCache.setWeeksIn(f1);
-//        chartCache.setWeeksOut(f2);
-//        saveChartCacheToPref(chartCache);
-
-        //保存 chart cache 至pref
-//        HomeCache homeCache = (HomeCache) getDefaultCache(HOME_CACHE);
-//        saveHomeCacheToPref(homeCache);
-//        //生成其它默认信息
-//        setDefaultOtherCache(0);
-//        PageDao.getInstance(getContext()).insert(new Page(0, "我的账单"));
-
+//        LogUtils.e("第一次启动应用，进行初始化，执行 firstLaunch()");
     }
 
     private Object getDefaultCache(String cacheName) {
@@ -163,7 +142,7 @@ public class CacheManager implements ICacheModel {
             HomeCache homeCache = new HomeCache();
             homeCache.setPage(intPage);
 
-            //title thisMonthIn thisMonthOut todayIn todayOut help
+            //title thisMonthIn thisMonthOut todayIn todayOut help today month
             String[] split = strCache.split(AppConfig.SYMBOL);
             TraversalUtils.array("cache manager load home str cache from pref", split);//log e
             for (int i = 0; i < split.length; i++) {
@@ -186,11 +165,30 @@ public class CacheManager implements ICacheModel {
                     case 5:
                         homeCache.setHelp(split[i]);
                         break;
+                    case 6:
+                        homeCache.setDay(Integer.parseInt(split[i]));
+                        break;
                     case 7:
+                        homeCache.setMonth(Integer.parseInt(split[i]));
+                        break;
+                    case 8:
                         break;
                     default:
                         break;
                 }
+            }
+            DateManger dateManger = DateManger.getInstance();
+            if (homeCache.getDay() != dateManger.getDay()) {//不是同一天，清空缓存
+                LogUtils.e("今天是几号=" + dateManger.getDay() + "  home cache 是几号" + homeCache.getDay());
+                homeCache.setDay(dateManger.getDay());
+                homeCache.setTodayIn(0);
+                homeCache.setTodayOut(0);
+                if (dateManger.getMonth() != homeCache.getMonth()) {//不是同一个月
+                    homeCache.setMonth(dateManger.getMonth());
+                    homeCache.setThisMonthIn(0);
+                    homeCache.setThisMonthOut(0);
+                }
+                saveHomeCacheToPref(homeCache);//清空缓存，并保存
             }
             homeCacheMap.put(page.getPage(), homeCache);
         }
@@ -201,14 +199,15 @@ public class CacheManager implements ICacheModel {
     private void saveHomeCacheToPref(HomeCache cache) {
         String symbol = AppConfig.SYMBOL;
         //保存为 string 用 symbol 分隔
-        //title thisMonthIn thisMonthOut todayIn todayOut help
+        //title thisMonthIn thisMonthOut todayIn todayOut help today month
         String strCache = cache.getTitle() + symbol +
                 cache.getStrThisMonthIn() + symbol + cache.getStrThisMonthOut() + symbol +
                 cache.getStrTodayIn() + symbol + cache.getStrTodayOut() + symbol +
-                cache.getHelp();
+                cache.getHelp() + symbol + cache.getDay() + symbol + cache.getMonth();
         int page = cache.getPage();
         String key = AppConfig.KEY_HOME_CACHE + page;
         PrefUtils.putString(getContext(), key, strCache);
+        LogUtils.e("保存 home cache 至 pref=" + strCache);
     }
 
     //读取 chart cache config from pref
@@ -270,7 +269,7 @@ public class CacheManager implements ICacheModel {
                     HomeCache homeCache = homeCacheMAP.get(page);
                     float[] weeksOut = chartCache.getWeeksOut();
                     float[] weeksIn = chartCache.getWeeksIn();
-                    int weekNum = DateUtils.getWeekNum(bill.getDate());
+                    int weekNum = DateManger.getWeekNum(bill.getDate());
                     switch (bill.getClassify()) {
                         case AppConfig.BOOK_IN_FRAGMENT:
                             homeCache.setTodayIn(homeCache.getTodayIn() + bill.getMoney());
@@ -285,6 +284,9 @@ public class CacheManager implements ICacheModel {
                             chartCache.setWeeksOut(weeksOut);
                             break;
                     }
+                    long date = System.currentTimeMillis();
+                    homeCache.setMonth(DateManger.getThisMonth(date));
+                    homeCache.setDay(DateManger.getThisDay(date));
                     saveHomeCacheToPref(homeCache);
                     saveChartCacheToPref(chartCache);
                 }
@@ -305,13 +307,61 @@ public class CacheManager implements ICacheModel {
                 homeCacheMAP.put(page.getPage(), homeCache);
             }
         }
-
-
     }
 
     @Override
     public void delete(String cacheName, Object event) {
+        if (cacheName.equals(DB_BILL)) {
+            Bill bill = (Bill) event;
+            int page = bill.getPage();
+            long date = bill.getDate();
 
+            //更新 chart cache
+            ChartCache chartCache = (ChartCache) mCache.getCache(CHART_CACHE);
+            int weekNum = DateManger.getWeekNum(date);
+            float[] weeksIn = chartCache.getWeeksIn();
+            float[] weeksOut = chartCache.getWeeksOut();
+            switch (bill.getClassify()) {
+                case AppConfig.BOOK_IN_FRAGMENT:
+                    weeksIn[weekNum - 1] = weeksIn[weekNum - 1] - bill.getMoney();
+                    break;
+                case AppConfig.BOOK_OUT_FRAGMENT:
+                    weeksOut[weekNum - 1] = weeksOut[weekNum - 1] - bill.getMoney();
+                    break;
+            }
+            chartCache.setWeeksIn(weeksIn);
+            chartCache.setWeeksOut(weeksOut);
+            saveChartCacheToPref(chartCache);//保存到缓存
+
+            //更新 home cache
+            Map<Integer, HomeCache> map = (Map<Integer, HomeCache>) mCache.getCache(HOME_CACHE_MAP);
+            HomeCache homeCache = map.get(page);
+            float todayIn = homeCache.getTodayIn();
+            float todayOut = homeCache.getTodayOut();
+            float thisMonthIn = homeCache.getThisMonthIn();
+            float thisMonthOut = homeCache.getThisMonthOut();
+            if (DateManger.isThisMonth(date)) {
+                switch (bill.getClassify()) {
+                    case AppConfig.BOOK_IN_FRAGMENT:
+                        thisMonthIn = thisMonthIn - bill.getMoney();
+                        homeCache.setThisMonthIn(thisMonthIn);//修改本月收入信息
+                        if (DateManger.isToday(date)) {
+                            todayIn = todayIn - bill.getMoney();
+                            homeCache.setTodayIn(todayIn);//修改本日收入信息
+                        }
+                        break;
+                    case AppConfig.BOOK_OUT_FRAGMENT:
+                        thisMonthOut = thisMonthOut - bill.getMoney();
+                        homeCache.setThisMonthOut(thisMonthOut);//修改本月支出信息
+                        if (DateManger.isToday(date)) {
+                            todayOut = todayOut - bill.getMoney();
+                            homeCache.setTodayOut(todayOut);//修改本日支出信息
+                        }
+                        break;
+                }
+            }
+            saveHomeCacheToPref(homeCache);
+        }
     }
 
     @Override
@@ -335,7 +385,6 @@ public class CacheManager implements ICacheModel {
                 HomeCache homeCache = map.get(p);
                 homeCache.setTitle(page.getTitle());
                 saveHomeCacheToPref(homeCache);//保存修改
-                LogUtils.e("cache manager page replace() 生成的新的 title =" + homeCache.getTitle());
             }
         }
     }
@@ -392,35 +441,35 @@ public class CacheManager implements ICacheModel {
         //chart 缓存
         ChartCache chartCache = new ChartCache();
         float[] weekIn = new float[60];
-        float[] weekOut =  new float[60];
+        float[] weekOut = new float[60];
         //home 缓存
         Map<Integer, HomeCache> map = new HashMap<Integer, HomeCache>();
         for (int i = 0; i < count; i++) {
             HomeCache homeCache = new HomeCache();
             List<Bill> billList = billDao.query(i);
-            float monthIn=0;
-            float monthOut=0;
-            float todayIn=0;
-            float todayOut=0;
+            float monthIn = 0;
+            float monthOut = 0;
+            float todayIn = 0;
+            float todayOut = 0;
             for (Bill bill : billList) {
                 long date = bill.getDate();
-                int weekNum = DateUtils.getWeekNum(date);
+                int weekNum = DateManger.getWeekNum(date);
                 switch (bill.getClassify()) {
                     case bookIn:
-                        weekIn[weekNum-1]= weekIn[weekNum-1]+bill.getMoney();
-                        if (DateUtils.isThisMonth(date)){
-                            monthIn=monthIn+bill.getMoney();
-                            if (DateUtils.isToday(date)){
-                                todayIn=todayIn+bill.getMoney();
+                        weekIn[weekNum - 1] = weekIn[weekNum - 1] + bill.getMoney();
+                        if (DateManger.isThisMonth(date)) {
+                            monthIn = monthIn + bill.getMoney();
+                            if (DateManger.isToday(date)) {
+                                todayIn = todayIn + bill.getMoney();
                             }
                         }
                         break;
                     case bookOut:
-                        weekOut[weekNum-1]= weekOut[weekNum-1]+bill.getMoney();
-                        if (DateUtils.isThisMonth(date)){
-                            monthOut=monthOut+bill.getMoney();
-                            if (DateUtils.isToday(date)){
-                                todayOut=todayOut+bill.getMoney();
+                        weekOut[weekNum - 1] = weekOut[weekNum - 1] + bill.getMoney();
+                        if (DateManger.isThisMonth(date)) {
+                            monthOut = monthOut + bill.getMoney();
+                            if (DateManger.isToday(date)) {
+                                todayOut = todayOut + bill.getMoney();
                             }
                         }
                         break;
@@ -430,13 +479,15 @@ public class CacheManager implements ICacheModel {
             homeCache.setThisMonthOut(monthOut);
             homeCache.setTodayIn(todayIn);
             homeCache.setTodayOut(todayOut);
+            homeCache.setDay(DateManger.getInstance().getDay());
+            homeCache.setMonth(DateManger.getInstance().getMonth());
             homeCache.setPage(i);
             homeCache.setTitle("我的账单" + i);
             homeCache.setHelp("作者：joey");
-            saveHomeCacheToPref(homeCache);
             PrefUtils.putString(getContext(), AppConfig.KEY_OUT_CLASSES + i, "早餐");
             PrefUtils.putString(getContext(), AppConfig.KEY_IN_CLASSES + i, "工资");
-            map.put(i,homeCache);
+            saveHomeCacheToPref(homeCache);//保存到pref
+            map.put(i, homeCache);//添加至缓存
         }
         //根据写入的测试数据，，计算缓存数据
         chartCache.setWeeksIn(weekIn);

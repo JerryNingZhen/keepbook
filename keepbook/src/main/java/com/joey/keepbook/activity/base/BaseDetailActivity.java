@@ -15,7 +15,7 @@ import com.joey.keepbook.R;
 import com.joey.keepbook.bean.Bill;
 import com.joey.keepbook.db.DbManager;
 import com.joey.keepbook.db.dao.BillDao;
-import com.joey.keepbook.utils.DateUtils;
+import com.joey.keepbook.utils.DateManger;
 import com.joey.keepbook.utils.PrefUtils;
 import com.joey.keepbook.view.HeadView;
 
@@ -156,7 +156,7 @@ public abstract class BaseDetailActivity extends BaseActivity {
             holder.tvMoney.setText(String.valueOf(bill.getMoney()));
             holder.tvTitle.setText(bill.getClasses());
             //格式化 小时：分钟
-            holder.tvDesc.setText(DateUtils.format(bill.getDate())+"   "+
+            holder.tvDesc.setText(DateManger.format(bill.getDate())+"   "+
                     bill.getRemark());
             return convertView;
         }

@@ -11,7 +11,7 @@ import com.joey.keepbook.bean.Page;
 import com.joey.keepbook.db.dao.BillDao;
 import com.joey.keepbook.db.dao.ClassesDao;
 import com.joey.keepbook.db.dao.PageDao;
-import com.joey.keepbook.utils.DateUtils;
+import com.joey.keepbook.utils.DateManger;
 import com.joey.keepbook.utils.LogUtils;
 
 import java.util.List;
@@ -31,7 +31,7 @@ public class Test extends AndroidTestCase {
         Time time=new Time();
         time.set(today);
         LogUtils.e("今天  月=" + time.month + "今天  号=" + time.monthDay);
-        int weekNum = DateUtils.getWeekNum(today);
+        int weekNum = DateManger.getWeekNum(today);
         LogUtils.e("今天 是第几周="+weekNum);
     }
 

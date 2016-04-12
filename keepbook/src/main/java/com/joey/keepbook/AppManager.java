@@ -10,7 +10,7 @@ import java.util.Stack;
  * activity堆栈式管理
  */
 public class AppManager {
-
+    public static boolean isRunning=true;
     private static Stack<Activity> activityStack;
     private static AppManager instance;
     private AppManager() {}
@@ -91,6 +91,7 @@ public class AppManager {
             }
         }
         activityStack.clear();
+        isRunning=false;
     }
 
     /**
@@ -117,5 +118,6 @@ public class AppManager {
             System.exit(0);
         } catch (Exception e) {
         }
+        isRunning=false;
     }
 }

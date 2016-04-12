@@ -12,7 +12,26 @@ public class HomeCache {
     private float thisMonthOut;
     private float todayIn;
     private float todayOut;
+    private int month;
+    private int day;
     private String help;
+
+    public int getMonth() {
+        return month;
+    }
+
+    public void setMonth(int month) {
+        this.month = month;
+    }
+
+    public int getDay() {
+        return day;
+    }
+
+    public void setDay(int day) {
+        this.day = day;
+    }
+
     public HomeCache() {
     }
     public String getTitle() {
@@ -52,6 +71,7 @@ public class HomeCache {
     }
 
     public void setTodayIn(float todayIn) {
+
         todayIn = twoPoint(todayIn);
         this.todayIn = todayIn;
     }

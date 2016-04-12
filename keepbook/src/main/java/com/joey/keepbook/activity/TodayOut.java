@@ -5,7 +5,7 @@ import android.os.Bundle;
 import com.joey.keepbook.AppConfig;
 import com.joey.keepbook.activity.base.BaseDetailActivity;
 import com.joey.keepbook.bean.Bill;
-import com.joey.keepbook.utils.DateUtils;
+import com.joey.keepbook.utils.DateManger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +24,7 @@ public class TodayOut extends BaseDetailActivity {
     protected List<Bill> getBillList(List<Bill> billList) {
         List<Bill> tempList = new ArrayList<Bill>();
         for (Bill b : billList) {
-            if (b.getClassify() == AppConfig.BOOK_OUT_FRAGMENT && DateUtils.isToday(b.getDate())) {
+            if (b.getClassify() == AppConfig.BOOK_OUT_FRAGMENT && DateManger.isToday(b.getDate())) {
                 tempList.add(b);
             }
         }

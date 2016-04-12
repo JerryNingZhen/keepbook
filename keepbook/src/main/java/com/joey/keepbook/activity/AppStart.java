@@ -1,6 +1,7 @@
 package com.joey.keepbook.activity;
 
 import android.app.Activity;
+import android.app.Service;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,6 +23,7 @@ import com.joey.keepbook.db.dao.BillDao;
 import com.joey.keepbook.db.dao.ClassesDao;
 import com.joey.keepbook.db.dao.PageDao;
 import com.joey.keepbook.listener.IReadyListener;
+import com.joey.keepbook.service.TimeService;
 import com.joey.keepbook.utils.LogUtils;
 import com.joey.keepbook.utils.PrefUtils;
 import com.joey.keepbook.utils.ToastUtils;
@@ -104,7 +106,7 @@ public class AppStart extends Activity {
         } else {
             init();
         }
-
+        startService(new Intent(this,TimeService.class));
     }
 
     //跳转 至 home

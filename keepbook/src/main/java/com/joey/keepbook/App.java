@@ -10,12 +10,10 @@ import com.joey.keepbook.utils.PrefUtils;
  */
 public class App extends Application {
     private static Context context;
-
     @Override
     public void onCreate() {
         super.onCreate();
         context=getApplicationContext();
-
     }
 
     /**

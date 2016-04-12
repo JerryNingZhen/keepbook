@@ -11,7 +11,7 @@ import com.joey.keepbook.R;
 import com.joey.keepbook.cache.CacheManager;
 import com.joey.keepbook.cache.ChartCache;
 import com.joey.keepbook.utils.ColorUtils;
-import com.joey.keepbook.utils.DateUtils;
+import com.joey.keepbook.utils.DateManger;
 import com.joey.keepbook.utils.TraversalUtils;
 
 import java.util.ArrayList;
@@ -106,7 +106,7 @@ public class HomeLeftFragment extends Fragment {
 
         initDataLineChart();//初始化线表数据
         attributesSetLineChart();//初始化线表属性
-        updateChart(DateUtils.getMonth());//初始化线表
+        updateChart(DateManger.getInstance().getMonth());//初始化线表
         initDataColumnChart();//初始化图表数据
         generateColumnData();
     }
