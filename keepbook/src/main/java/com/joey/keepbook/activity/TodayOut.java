@@ -1,7 +1,11 @@
 package com.joey.keepbook.activity;
 
+import android.os.Bundle;
+
+import com.joey.keepbook.AppConfig;
 import com.joey.keepbook.activity.base.BaseDetailActivity;
 import com.joey.keepbook.bean.Bill;
+import com.joey.keepbook.utils.DateUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,22 +15,19 @@ import java.util.List;
  */
 public class TodayOut extends BaseDetailActivity {
     @Override
-    protected void initData() {
-        super.initData();
-        title="今日支出";
-        classify= activityManager.BOOKOUTFRAGMENT;//收入状态
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getTvTitle().setText("今日收入");
+    }
 
-        /**
-         * 筛选今日收入数据
-         */
-        List<Bill> tempList=new ArrayList<Bill>();
-        for (Bill b:billList){
-            if (b.getClassify()==classify){
-                if (dateFormat.isSameDay(today,b.getDate())){
-                    tempList.add(b);
-                }
+    @Override
+    protected List<Bill> getBillList(List<Bill> billList) {
+        List<Bill> tempList = new ArrayList<Bill>();
+        for (Bill b : billList) {
+            if (b.getClassify() == AppConfig.BOOK_OUT_FRAGMENT && DateUtils.isToday(b.getDate())) {
+                tempList.add(b);
             }
         }
-        billList=tempList;
+        return tempList;
     }
 }

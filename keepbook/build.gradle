@@ -24,4 +24,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:18.+'
     compile files('libs/w.song.android.widget-1.0.4.jar')
     compile 'com.github.lecho:hellocharts-library:1.5.8@aar'
+    compile 'com.android.support:support-v4:18.+'
 }

@@ -2,29 +2,20 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_focused="true">
         <shape>
-            <corners android:bottomLeftRadius="0dp" android:bottomRightRadius="5dp" android:topLeftRadius="0dp" android:topRightRadius="5dp" />
-            <solid android:color="@color/bt_gray_yellow_deep" />
-            <padding android:bottom="0dp" android:left="0dp" android:right="0dp" android:top="0dp" />
-            <size android:width="40dp" android:height="60dp" />
-            <stroke android:width="2dp" android:color="@color/bt_gray_yellow_stroke" />
+            <corners android:bottomLeftRadius="0dp" android:bottomRightRadius="2dp" android:topLeftRadius="0dp" android:topRightRadius="2dp" />
+            <solid android:color="@color/dark_deep_yellow" />
         </shape>
     </item>
     <item android:state_pressed="true">
         <shape>
-            <corners android:bottomLeftRadius="0dp" android:bottomRightRadius="5dp" android:topLeftRadius="0dp" android:topRightRadius="5dp" />
-            <solid android:color="@color/bt_gray_yellow_deep" />
-            <padding android:bottom="0dp" android:left="0dp" android:right="0dp" android:top="0dp" />
-            <size android:width="40dp" android:height="60dp" />
-            <stroke android:width="2dp" android:color="@color/bt_gray_yellow_stroke" />
+            <corners android:bottomLeftRadius="0dp" android:bottomRightRadius="2dp" android:topLeftRadius="0dp" android:topRightRadius="2dp" />
+            <solid android:color="@color/dark_deep_yellow" />
         </shape>
     </item>
     <item>
         <shape>
-            <corners android:bottomLeftRadius="0dp" android:bottomRightRadius="5dp" android:topLeftRadius="0dp" android:topRightRadius="5dp" />
-            <solid android:color="@color/bt_gray_yellow" />
-            <padding android:bottom="0dp" android:left="0dp" android:right="0dp" android:top="0dp" />
-            <size android:width="40dp" android:height="60dp" />
-            <stroke android:width="2dp" android:color="@color/bt_gray_yellow_stroke" />
+            <corners android:bottomLeftRadius="0dp" android:bottomRightRadius="2dp" android:topLeftRadius="0dp" android:topRightRadius="2dp" />
+            <solid android:color="@color/deep_yellow" />
         </shape>
     </item>
 </selector>

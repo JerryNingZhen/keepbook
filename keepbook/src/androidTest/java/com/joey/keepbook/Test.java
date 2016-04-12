@@ -6,14 +6,12 @@ import android.test.AndroidTestCase;
 import android.text.format.Time;
 
 import com.joey.keepbook.bean.Bill;
-import com.joey.keepbook.bean.ChartInitData;
 import com.joey.keepbook.bean.Classes;
 import com.joey.keepbook.bean.Page;
 import com.joey.keepbook.db.dao.BillDao;
 import com.joey.keepbook.db.dao.ClassesDao;
 import com.joey.keepbook.db.dao.PageDao;
-import com.joey.keepbook.engine.BillData;
-import com.joey.keepbook.manager.MyActivityManager;
+import com.joey.keepbook.utils.DateUtils;
 import com.joey.keepbook.utils.LogUtils;
 
 import java.util.List;
@@ -26,24 +24,22 @@ public class Test extends AndroidTestCase {
     private static final String TAG = "调试测试类";
     private Context context;
     private Resources resources;
-    private Long ONE_YEAR=31536000000L;
+    private Long ONE_YEAR = 31536000000L;
     private long today = System.currentTimeMillis();
 
     public void test() {
-//        insert();
-//        Time time=new Time();
-//        time.set(System.currentTimeMillis());
-//        LogUtils.e(TAG,"月="+time.month+"  日"+time.monthDay);
-        ChartInitData chartInitData = BillData.getInstance(getContext()).getChartInitData();
-        float[][] monthTotals = chartInitData.getMonthTotals();
-        for (int i=0;i<monthTotals.length;i++){
-            for (int j=0;j<monthTotals[0].length;j++){
-                LogUtils.e(TAG, "x= "+i+"  y= "+j+"   "+monthTotals[i][j]);
-            }
-        }
-        LogUtils.e(TAG, monthTotals[1].toString());
-        LogUtils.e(TAG, chartInitData.getWeekTotals().toString());
+        Time time=new Time();
+        time.set(today);
+        LogUtils.e("今天  月=" + time.month + "今天  号=" + time.monthDay);
+        int weekNum = DateUtils.getWeekNum(today);
+        LogUtils.e("今天 是第几周="+weekNum);
     }
+
+    private void insertPage() {
+
+    }
+
+
 
     private void insert() {
         context = getContext();
@@ -73,7 +69,7 @@ public class Test extends AndroidTestCase {
         }
 
         for (int i = 0; i < 2000; i++) {
-            long date = (long) (oneYearAgo +ONE_YEAR*Math.random());
+            long date = (long) (oneYearAgo + ONE_YEAR * Math.random());
             float money = random.nextInt(1000) * 0.1f;
             String remark = "无备注 测试。。。" + i;
             String str = "测试" + random.nextInt(99);
@@ -82,6 +78,7 @@ public class Test extends AndroidTestCase {
             billDao.insert(new Bill(date, money, remark, str, classify, page));
         }
     }
+
 
     private void traversalBill(List<Bill> billList) {
         int n = 1;

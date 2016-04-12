@@ -1,6 +1,5 @@
 package com.joey.keepbook.activity;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,37 +12,31 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.joey.keepbook.AppConfig;
+import com.joey.keepbook.App;
 import com.joey.keepbook.R;
-import com.joey.keepbook.base.BaseActivity;
+import com.joey.keepbook.activity.base.BaseActivity;
 import com.joey.keepbook.bean.Classes;
-import com.joey.keepbook.manager.MyActivityManager;
 import com.joey.keepbook.db.dao.ClassesDao;
 import com.joey.keepbook.utils.LogUtils;
 import com.joey.keepbook.utils.PrefUtils;
 import com.joey.keepbook.utils.ToastUtils;
 import com.joey.keepbook.view.HeadView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ClassesListActivity extends BaseActivity {
     //常量
-    private static final String TAG = "调试ClassesListActivity";
-    private final String strDefTitleIn = "收入类别";
-    private final String strDefTitleOut = "收入类别";
-
+    private final String strTitleIn = "收入类别";
+    private final String strTitleOut = "支出类别";
     //状态
     private int mIntState;
     private int mIntPage;
 
     //view控件
-    private HeadView hv;
     private ListView lv;
-    private TextView tvTitle;
-    private Button btAddClasses;
-
-    //view数据
-    private String mStrTitle;
-
 
     //ListView数据
     private List<Classes> classesList;
@@ -51,81 +44,37 @@ public class ClassesListActivity extends BaseActivity {
 
     //数据库
     private String mStrClasses;
-    private ClassesDao mClassesDao;
-    private String mStrKeyResult;
-    private int mIntResult_ok;
-    private int mIntResult_null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LogUtils.e(TAG, "onCreate()");
-        initFinalData();
-        initUI();
-        initListener();
-    }
+        LogUtils.e("列别列表 ClassesListActivity onCreate()");
+        setContentView(R.layout.activity_classes_list);
+        TextView tvTitle = (TextView) findViewById(R.id.tv_classes_list_title);
+        HeadView hv = (HeadView) findViewById(R.id.hv_activity_classes_list);
+        lv = (ListView) findViewById(R.id.lv_activity_classes_list);
+        Button btAddClasses = (Button) findViewById(R.id.bt_add_classes);
 
-    /**
-     * 初始化最终数据
-     */
-    private void initFinalData() {
-        mClassesDao = ClassesDao.getInstance(this);
-        MyActivityManager activityManager = MyActivityManager.getInstance();
-        //状态列表
-        int mIntStateIn = activityManager.BOOKINFRAGMENT;
-        int mIntStateOut = activityManager.BOOKOUTFRAGMENT;
-        //key
-        String strKeyState = activityManager.KEY_BOOK_STATE;
-        String strKeyPage = activityManager.KEY_PAGE;
-        mStrKeyResult = activityManager.KEY_RESULT;
-        //状态
-        mIntState = PrefUtils.getInt(this, strKeyState, mIntStateOut);
-        mIntPage = PrefUtils.getInt(this, strKeyPage, 1);
-        //result value
-        mIntResult_ok = activityManager.RESULT_OK;
-        mIntResult_null = activityManager.RESULT_NULL;
+        //获取状态 state page
+        mIntState = PrefUtils.getInt(this, AppConfig.KEY_BOOK_STATE, AppConfig.BOOK_OUT_FRAGMENT);
+        mIntPage = PrefUtils.getInt(this, AppConfig.KEY_PAGE, 0);
 
-        //view title text
-        if (mIntState == mIntStateIn) {
-            mStrTitle = strDefTitleIn;
-        } else if (mIntState == mIntStateOut) {
-            mStrTitle = strDefTitleOut;
+        //设置标题
+        if (mIntState == AppConfig.BOOK_IN_FRAGMENT) {
+            tvTitle.setText(strTitleIn);
+        } else if (mIntState == AppConfig.BOOK_OUT_FRAGMENT) {
+            tvTitle.setText(strTitleOut);
         }
 
-        //view classes text
-        classesList = mClassesDao.query(mIntState, mIntPage);
-    }
-
-    /**
-     * 初始化UI
-     */
-    private void initUI() {
-        setContentView(R.layout.activity_classes_list);
-        tvTitle = (TextView) findViewById(R.id.tv_classes_list_title);
-        hv = (HeadView) findViewById(R.id.hv_activity_classes_list);
-        lv = (ListView) findViewById(R.id.lv_activity_classes_list);
-        btAddClasses = (Button) findViewById(R.id.bt_add_classes);
-
-        //设置ui数据
-        tvTitle.setText(mStrTitle);
-
-        //设置ListView适配
-        mAdapter = new MyAdapter();
-        lv.setAdapter(mAdapter);
-
-
-    }
-
-    private void initListener() {
-        //返回按钮点击监听
+        //点击 返回 按钮
         hv.setHeadButtonClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
-
-        //类别列表被点击
+        //点击 类别 列表
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -134,7 +83,7 @@ public class ClassesListActivity extends BaseActivity {
                 finish();
             }
         });
-
+        //长按 类别 列表
         lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -142,8 +91,7 @@ public class ClassesListActivity extends BaseActivity {
                 return true;
             }
         });
-
-        //添加类别按钮被点击
+        //点击 添加 按钮
         btAddClasses.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -151,7 +99,25 @@ public class ClassesListActivity extends BaseActivity {
             }
         });
 
+        initData();
     }
+
+    /**
+     * 初始化数据
+     */
+    private void initData() {
+        List<Classes> classes = ClassesDao.getInstance(this).query(mIntPage);
+        classesList = new ArrayList<Classes>();
+        for (Classes c : classes) {
+            if (c.getClassify() == mIntState) {
+                classesList.add(c);
+            }
+        }
+        //设置ListView适配
+        mAdapter = new MyAdapter();
+        lv.setAdapter(mAdapter);
+    }
+
 
     //删除对话框
     private void showDeleteDialog(final Classes deleteClasses) {
@@ -162,7 +128,6 @@ public class ClassesListActivity extends BaseActivity {
         builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                mClassesDao.delete(deleteClasses);
                 classesList.remove(deleteClasses);
                 mAdapter.notifyDataSetChanged();
                 dialog.dismiss();
@@ -176,8 +141,6 @@ public class ClassesListActivity extends BaseActivity {
         });
         builder.create().show();
     }
-
-
 
 
     /**
@@ -225,9 +188,10 @@ public class ClassesListActivity extends BaseActivity {
      * 显示对话框
      */
     private void showAddClassesDialog() {
-        final AlertDialog dialog = new AlertDialog.Builder(this).create();
         final View view = getLayoutInflater().inflate(R.layout.view_dialog_classes, null);
-        dialog.setView(view);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(view);
+        final AlertDialog dialog = builder.create();
         dialog.show();
 
         final EditText etDialog = (EditText) view.findViewById(R.id.et_dialog_classes);
@@ -250,7 +214,7 @@ public class ClassesListActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 String text = etDialog.getText().toString().trim();
-                Classes tempClasses=new Classes(text,mIntState,mIntPage);
+                Classes tempClasses = new Classes(text, mIntState, mIntPage);
                 if (text.equals("") || text == null) {
                     ToastUtils.makeTextShort(dialog.getContext(), "输入的类别不能为空");
                     return;
@@ -259,7 +223,7 @@ public class ClassesListActivity extends BaseActivity {
                     ToastUtils.makeTextShort(dialog.getContext(), "输入的类别已经存在");
                     return;
                 }
-                mClassesDao.insert(tempClasses);
+                ClassesDao.getInstance(App.getContextObject()).insert(tempClasses);
                 classesList.add(tempClasses);
                 mAdapter.notifyDataSetChanged();
                 dialog.dismiss();
@@ -270,11 +234,11 @@ public class ClassesListActivity extends BaseActivity {
     public void setResult() {
         Intent resultIntent = new Intent(this, BookActivity.class);
         if (mStrClasses == null && mStrClasses == "") {
-            resultIntent.putExtra(mStrKeyResult, "");
-            setResult(mIntResult_null, resultIntent);
+            resultIntent.putExtra(AppConfig.KEY_RESULT, "");
+            setResult(AppConfig.RESULT_NULL, resultIntent);
         } else {
-            resultIntent.putExtra(mStrKeyResult, mStrClasses);
-            setResult(mIntResult_ok, resultIntent);
+            resultIntent.putExtra(AppConfig.KEY_RESULT, mStrClasses);
+            setResult(AppConfig.RESULT_OK, resultIntent);
         }
     }
 
@@ -282,8 +246,7 @@ public class ClassesListActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mAdapter=null;
-        mClassesDao.close();
-        LogUtils.e(TAG, "onDestroy");
+        mAdapter = null;
+        LogUtils.e("类别列表 被销毁  onDestroy");
     }
 }

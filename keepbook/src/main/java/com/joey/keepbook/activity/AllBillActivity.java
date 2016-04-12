@@ -1,5 +1,7 @@
 package com.joey.keepbook.activity;
 
+import android.os.Bundle;
+
 import com.joey.keepbook.activity.base.BaseDetailActivity;
 import com.joey.keepbook.bean.Bill;
 
@@ -12,8 +14,13 @@ import java.util.List;
  */
 public class AllBillActivity extends BaseDetailActivity {
     @Override
-    protected void initData() {
-        super.initData();
-        title="账单明细";
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getTvTitle().setText("账单明细");
+    }
+
+    @Override
+    protected List<Bill> getBillList(List<Bill> billList) {
+        return billList;
     }
 }

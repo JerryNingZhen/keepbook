@@ -1,9 +1,7 @@
 package com.joey.keepbook.activity.base;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,13 +10,12 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.joey.keepbook.AppConfig;
 import com.joey.keepbook.R;
-import com.joey.keepbook.activity.HomeActivity;
 import com.joey.keepbook.bean.Bill;
-import com.joey.keepbook.manager.MyActivityManager;
-import com.joey.keepbook.data.Data;
+import com.joey.keepbook.db.DbManager;
 import com.joey.keepbook.db.dao.BillDao;
-import com.joey.keepbook.engine.BillDateFormat;
+import com.joey.keepbook.utils.DateUtils;
 import com.joey.keepbook.utils.PrefUtils;
 import com.joey.keepbook.view.HeadView;
 
@@ -27,61 +24,19 @@ import java.util.List;
 /**
  * Created by Joey on 2016/3/4.
  */
-public abstract class BaseDetailActivity extends Activity {
-    private ListView lv;
+public abstract class BaseDetailActivity extends BaseActivity {
     private MyAdapter mAdapter;
-    private TextView tvTitle;
     private BillDao dao;
 
-    /**
-     * view 属性
-     */
-    protected List<Bill> billList;
-    protected String title = "";
+    //view
+    private TextView tvTitle;
+    private ListView lv;
+    //在子类中进行修改
+    private List<Bill> billList;
 
-    /**
-     * 工具
-     */
-    protected BillDateFormat dateFormat;
-    protected MyActivityManager activityManager;
-
-
-    /**
-     * 状态
-     */
-    protected int classify=-1;
-    protected long today;
-
-    /**
-     * 创建界面
-     *
-     * @param savedInstanceState
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initData();
-        initUI();
-    }
-
-    /**
-     * 初始化数据
-     */
-    protected void initData() {
-        dao = BillDao.getInstance(this);
-        activityManager = MyActivityManager.getInstance();
-        String strKeyPage= activityManager.KEY_PAGE;
-
-        int intPage = PrefUtils.getInt(this, strKeyPage, 1);
-        billList = dao.query(intPage);
-        dateFormat = BillDateFormat.getInstance();
-        today = System.currentTimeMillis();
-    }
-
-    /**
-     * 初始化UI
-     */
-    private void initUI() {
         setContentView(R.layout.activity_bill_detail);
         /**
          * 三个View
@@ -89,21 +44,27 @@ public abstract class BaseDetailActivity extends Activity {
         HeadView hv = (HeadView) findViewById(R.id.hv_bill_detail);
         tvTitle = (TextView) findViewById(R.id.tv_bill_detail);
         lv = (ListView) findViewById(R.id.lv_bill_detail);
-
-        /**
-         * 设置View属性
-         */
-        tvTitle.setText(title);
-
-        /**
-         * 点击按钮返回
-         */
         hv.setHeadButtonClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
+
+        dao = DbManager.getInstance().getBillDao(this);
+        billList = dao.query(PrefUtils.getInt(this, AppConfig.KEY_PAGE, 0));
+        billList=getBillList(billList);//在子类中修改
+    }
+    protected abstract List<Bill> getBillList(List<Bill>billList);
+
+    protected TextView getTvTitle() {
+        return tvTitle;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
         mAdapter = new MyAdapter();
         lv.setAdapter(mAdapter);
 
@@ -112,7 +73,6 @@ public abstract class BaseDetailActivity extends Activity {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 showDeleteDialog(billList.get(position));
-
                 return true;
             }
         });
@@ -196,7 +156,7 @@ public abstract class BaseDetailActivity extends Activity {
             holder.tvMoney.setText(String.valueOf(bill.getMoney()));
             holder.tvTitle.setText(bill.getClasses());
             //格式化 小时：分钟
-            holder.tvDesc.setText(dateFormat.format(bill.getDate(), dateFormat.getPattern().SHOWTIME)+
+            holder.tvDesc.setText(DateUtils.format(bill.getDate())+"   "+
                     bill.getRemark());
             return convertView;
         }

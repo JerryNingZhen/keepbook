@@ -7,7 +7,7 @@ import android.util.TypedValue;
 import android.widget.TextView;
 
 import com.joey.keepbook.R;
-import com.joey.keepbook.view.base.ImageTwoTextView;
+import com.joey.keepbook.view.framework.ImageTwoTextView;
 
 /**
  * Created by Joey on 2016/3/4.

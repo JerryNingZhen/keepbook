@@ -2,9 +2,6 @@ package com.joey.keepbook.utils;
 
 import android.text.format.Time;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 /**
  * Created by Joey on 2016/2/22.
  */
@@ -13,9 +10,9 @@ public class DateUtils {
     private static Time time=new Time();
 
     //"%Y-%m-%d %H:%M:%S" pattern
-    public static final String SHOWTIME = "%H:%M";
-    public static final String SHOWDATE = "%Y-%m-%d";
-    public static final String SHOWDATEANDTIME = "%Y-%m-%d %H:%M";
+    public static final String H_M = "%H:%M";
+    public static final String Y_M_D = "%Y-%m-%d";
+    public static final String Y_M_D_H_M = "%Y-%m-%d %H:%M";
 
     //格式化时间
     public static String format(long date){
@@ -26,7 +23,7 @@ public class DateUtils {
             return null;
         }
         if (pattern==null||pattern.equals("")){
-            pattern=SHOWDATEANDTIME;
+            pattern= Y_M_D_H_M;
         }
         time.set(date);
         return time.format(pattern);
@@ -83,5 +80,12 @@ public class DateUtils {
     public static int getMonth(){
         time.set(System.currentTimeMillis());
         return time.month;
+    }
+
+    //第几周 1-60周
+    public static int getWeekNum(long date){
+        Time time=new Time();
+        time.set(date);
+        return time.monthDay / 7 + time.month* 5+1;
     }
 }

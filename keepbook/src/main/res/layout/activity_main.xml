@@ -4,33 +4,22 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <fragment
-        android:id="@+id/fragment_total"
-        android:name="com.joey.keepbook.activity.MainTotalFragment"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="7" />
-
-
-    <fragment
-        android:id="@+id/fragment_detail"
-        android:name="com.joey.keepbook.activity.MainDetailFragment"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="5" />
-
+    <android.support.v4.view.ViewPager
+        android:id="@+id/view_pager"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="99" />
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="5dp"
-        android:background="@color/gray" />
-
+        android:background="@color/alpha_black3" />
     <LinearLayout
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/alpha_black0"
         android:orientation="horizontal">
-
         <com.joey.keepbook.view.BottomMenuView
             android:id="@+id/bmv_bottom_menu_detail"
             android:layout_width="wrap_content"
@@ -41,7 +30,7 @@
             app:main_src="@mipmap/ico_main_detail_n" />
 
         <com.joey.keepbook.view.BottomMenuView
-            android:id="@+id/bt_bottom_menu_stat"
+            android:id="@+id/bmv_bottom_menu_stat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -50,7 +39,7 @@
             app:main_src="@mipmap/ico_main_stat_n" />
 
         <com.joey.keepbook.view.BottomMenuView
-            android:id="@+id/bt_bottom_menu_account"
+            android:id="@+id/bmv_bottom_menu_account"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -59,7 +48,7 @@
             app:main_src="@mipmap/ico_main_account_n" />
 
         <com.joey.keepbook.view.BottomMenuView
-            android:id="@+id/bt_bottom_menu_fund"
+            android:id="@+id/bmv_bottom_menu_fund"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -68,7 +57,7 @@
             app:main_src="@mipmap/ico_main_fund_n" />
 
         <com.joey.keepbook.view.BottomMenuView
-            android:id="@+id/bt_bottom_menu_bbs"
+            android:id="@+id/bmv_bottom_menu_bbs"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -76,6 +65,5 @@
             app:main_desc="社区"
             app:main_src="@mipmap/ico_main_bbs_n" />
     </LinearLayout>
-
 </LinearLayout>
 

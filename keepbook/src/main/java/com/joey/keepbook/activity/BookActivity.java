@@ -1,6 +1,5 @@
 package com.joey.keepbook.activity;
 
-import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
@@ -8,14 +7,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.joey.keepbook.AppConfig;
 import com.joey.keepbook.R;
-import com.joey.keepbook.base.BaseActivity;
-import com.joey.keepbook.fragment.BookFragment;
-import com.joey.keepbook.fragment.BookInFragment;
-import com.joey.keepbook.fragment.BookOutFragment;
-import com.joey.keepbook.manager.MyActivityManager;
-import com.joey.keepbook.data.Data;
-import com.joey.keepbook.listener.ActivityListener;
+import com.joey.keepbook.activity.base.BaseActivity;
+import com.joey.keepbook.listener.IReceiveResult;
+import com.joey.keepbook.utils.LogUtils;
 import com.joey.keepbook.utils.PrefUtils;
 import com.joey.keepbook.view.HeadView;
 
@@ -40,10 +36,7 @@ public class BookActivity extends BaseActivity {
     private Button btBookOut;
     private Button btBookIn;
     //数据
-    private ActivityListener activityListener;
-    private Data data;
-    private MyActivityManager mActivityManager;
-
+    private IReceiveResult listener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,17 +49,15 @@ public class BookActivity extends BaseActivity {
      * 初始化最终数据
      */
     private void initFinalData() {
-        data = Data.getInstance();
-        mActivityManager = MyActivityManager.getInstance();
         //状态列表
-        mIntStateIn = mActivityManager.BOOKINFRAGMENT;
-        mIntStateOut = mActivityManager.BOOKOUTFRAGMENT;
+        mIntStateIn = AppConfig.BOOK_IN_FRAGMENT;
+        mIntStateOut = AppConfig.BOOK_OUT_FRAGMENT;
         //key
-        mStrKeyState = mActivityManager.KEY_BOOK_STATE;
-        String strKeyPage = mActivityManager.KEY_PAGE;
+        mStrKeyState = AppConfig.KEY_BOOK_STATE;
+        String strKeyPage = AppConfig.KEY_PAGE;
         //状态
         mIntPage = PrefUtils.getInt(this, strKeyPage, 1);
-        mIntState = PrefUtils.getInt(this, mStrKeyState, mIntStateOut);
+        mIntState = PrefUtils.getInt(this, mStrKeyState, 1);
     }
 
     /**
@@ -104,7 +95,7 @@ public class BookActivity extends BaseActivity {
         hvActivityBook.setHeadButtonClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(BookActivity.this, HomeActivity.class));
+                startActivity(new Intent(BookActivity.this, MainActivity.class));
                 finish();
             }
         });
@@ -150,7 +141,7 @@ public class BookActivity extends BaseActivity {
             }
             mFragment = bookOutFragment;
         }
-        setActivityListener(mFragment);
+        listener=mFragment;
         transaction.replace(R.id.fg_book, mFragment);
         transaction.commit();
     }
@@ -170,14 +161,7 @@ public class BookActivity extends BaseActivity {
         bookInFragment = null;
         bookOutFragment = null;
         mFragment = null;
-        data.close();
         finish();
-    }
-
-    @Override
-    public void onBackPressed() {
-        releaseMemory();
-        super.onBackPressed();
     }
 
     @Override
@@ -186,12 +170,10 @@ public class BookActivity extends BaseActivity {
         super.onDestroy();
     }
 
-    public void setActivityListener(ActivityListener activityListener) {
-        this.activityListener = activityListener;
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        activityListener.onReceiveActivityResult(requestCode, resultCode, data);
+        LogUtils.e("book activity 收到 classes 返回的列表 结果");
+        listener.onReceiveResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

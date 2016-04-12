@@ -8,16 +8,17 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.joey.keepbook.R;
-import com.joey.keepbook.base.BaseActivity;
 import com.joey.keepbook.bean.Page;
+import com.joey.keepbook.db.DbManager;
 import com.joey.keepbook.db.dao.PageDao;
 import com.joey.keepbook.utils.InputMethodUtils;
+import com.joey.keepbook.utils.LogUtils;
 import com.joey.keepbook.view.HeadView;
 
 /**
  * Created by Joey on 2016/3/13.
  */
-public class AddNewBillActivity extends BaseActivity {
+public class AddNewBillActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,11 +44,12 @@ public class AddNewBillActivity extends BaseActivity {
         });
 
         final EditText editTitle = (EditText)findViewById(R.id.et_add_new_bill);
+
         //顶端按钮被点击
         headView.setHeadButtonClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(AddNewBillActivity.this, HomeActivity.class));
+                startActivity(new Intent(AddNewBillActivity.this, MainActivity.class));
                 finish();
             }
         });
@@ -57,7 +59,7 @@ public class AddNewBillActivity extends BaseActivity {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(AddNewBillActivity.this, HomeActivity.class));
+                startActivity(new Intent(AddNewBillActivity.this, MainActivity.class));
                 finish();
             }
         });
@@ -66,15 +68,14 @@ public class AddNewBillActivity extends BaseActivity {
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PageDao dao = PageDao.getInstance(AddNewBillActivity.this);
+                PageDao dao = DbManager.getInstance().getPageDao(AddNewBillActivity.this);
                 String strTitle = editTitle.getText().toString().trim();
-                int intCount = dao.getCount() + 1;
+                int intCount = dao.getCount();
                 dao.insert(new Page(intCount, strTitle));
-                startActivity(new Intent(AddNewBillActivity.this, HomeActivity.class));
+                LogUtils.e("增加了一个新 page  page="+intCount+"  标题="+strTitle);
+                startActivity(new Intent(AddNewBillActivity.this, MainActivity.class));
                 finish();
             }
         });
     }
-
-
 }

@@ -8,12 +8,16 @@ import android.util.Log;
 public class LogUtils {
     private static boolean isDebug = true;
     /**
-     * loge
-     * @param TAG
-     * @param text
+     * log e
      */
     public static void e(String TAG, String text) {
         if (isDebug)
             Log.e(TAG, text);
+    }
+    /**
+     * log e
+     */
+    public static void e(String text) {
+        e("调试",text);
     }
 }

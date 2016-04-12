@@ -11,6 +11,18 @@ public class Classes {
     private int page;
 
 
+    public void setClasses(String classes) {
+        this.classes = classes;
+    }
+
+    public void setClassify(int classify) {
+        this.classify = classify;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
+
     public Classes(String classes, int classify,int page) {
         this.classes = classes;
         this.classify = classify;

@@ -5,19 +5,20 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.joey.keepbook.data.Data;
 import com.joey.keepbook.bean.Classes;
-import com.joey.keepbook.data.DbConstant;
+import com.joey.keepbook.AppConstant;
 import com.joey.keepbook.db.ClassesOpenHelper;
+import com.joey.keepbook.db.base.BaseDao;
+import com.joey.keepbook.db.event.DbEvent;
 import com.joey.keepbook.utils.LogUtils;
-
 import java.util.ArrayList;
 import java.util.List;
+
 
 /**
  * Created by Joey on 2016/3/6.
  */
-public class ClassesDao {
+public class ClassesDao extends BaseDao {
     private static final String TAG = "调试ClassesDao";
     private static ClassesDao mDao;
     private ClassesOpenHelper mHelper;
@@ -32,9 +33,9 @@ public class ClassesDao {
     public static ClassesDao getInstance(Context context) {
         if (mDao == null) {
             mDao = new ClassesDao(context);
-            DbConstant dbConstant = Data.getInstance().getDbConstant();
-            mTableName = dbConstant.classesTableName;
-            mColumns = dbConstant.classesColumns;
+            AppConstant appConstant = AppConstant.getInstance();
+            mTableName = appConstant.classesTableName;
+            mColumns = appConstant.classesColumns;
         }
         return mDao;
     }
@@ -55,6 +56,7 @@ public class ClassesDao {
         db.close();
         values.clear();
         LogUtils.e(TAG, "insert: " + classes.toString());
+        handleChanged(new DbEvent(DbEvent.insertEvent, classes));
         return result;
     }
 
@@ -65,6 +67,7 @@ public class ClassesDao {
         SQLiteDatabase db = mHelper.getWritableDatabase();
         int count = db.delete(mTableName, null, null);
         db.close();
+        handleChanged(new DbEvent(DbEvent.deleteAllEvent, null));
         return count;
     }
 
@@ -79,15 +82,10 @@ public class ClassesDao {
                 new String[]{String.valueOf(classes.getClasses()), String.valueOf(classes.getPage())});
         db.close();
         LogUtils.e(TAG, "delete: " + classes.toString());
+        handleChanged(new DbEvent(DbEvent.deleteEvent, classes));
         return count;
     }
 
-    /**
-     * replace  改
-     */
-    public boolean replace() {
-        return false;
-    }
 
     /**
      * insert   查
@@ -105,6 +103,7 @@ public class ClassesDao {
             Classes c = new Classes(classes, classify, page);
             classesList.add(c);
         }
+        handleChanged(new DbEvent(DbEvent.queryEvent,null));
         return classesList;
     }
 
@@ -124,6 +123,7 @@ public class ClassesDao {
             Classes c = new Classes(classes, classify, page);
             classesList.add(c);
         }
+        handleChanged(new DbEvent(DbEvent.queryEvent,null));
         return classesList;
     }
 
@@ -132,5 +132,20 @@ public class ClassesDao {
         mTableName=null;
         mHelper=null;
         mDao=null;
+    }
+
+    public List<Classes> query() {
+        List<Classes> classesList = new ArrayList<Classes>();
+        SQLiteDatabase db = mHelper.getWritableDatabase();
+        Cursor cursor = db.query(mTableName, mColumns[0], null, null, null, null, null);
+        while (cursor.moveToNext()) {
+            String classes = cursor.getString(0);
+            int classify = cursor.getInt(1);
+            int page = cursor.getInt(2);
+            Classes c = new Classes(classes, classify, page);
+            classesList.add(c);
+        }
+        handleChanged(new DbEvent(DbEvent.queryEvent,null));
+        return classesList;
     }
 }

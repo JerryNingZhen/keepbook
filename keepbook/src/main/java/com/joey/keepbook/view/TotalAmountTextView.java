@@ -7,7 +7,7 @@ import android.util.TypedValue;
 import android.widget.TextView;
 
 import com.joey.keepbook.R;
-import com.joey.keepbook.view.base.DoubleTextView;
+import com.joey.keepbook.view.framework.DoubleTextView;
 
 /**
  * Created by Joey on 2016/2/15.
