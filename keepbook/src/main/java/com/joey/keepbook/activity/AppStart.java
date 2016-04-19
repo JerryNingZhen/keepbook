@@ -168,7 +168,5 @@ public class AppStart extends Activity {
                 }
             }
         }.start();
-
-
     }
 }

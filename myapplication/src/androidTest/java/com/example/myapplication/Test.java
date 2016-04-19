@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 
+import android.support.design.widget.CoordinatorLayout;
 import android.test.AndroidTestCase;
 import android.text.TextUtils;
 import android.util.Log;
@@ -14,8 +15,6 @@ public class Test extends AndroidTestCase {
     public void test(){
         String text="asdfa2::asdfa1:af3";
         String[] split = TextUtils.split(text, ":");
-        for (String s:split){
 
-        }
     }
 }

@@ -28,80 +28,20 @@ public class Test extends AndroidTestCase {
     private long today = System.currentTimeMillis();
 
     public void test() {
-        Time time=new Time();
-        time.set(today);
-        LogUtils.e("今天  月=" + time.month + "今天  号=" + time.monthDay);
-        int weekNum = DateManger.getWeekNum(today);
-        LogUtils.e("今天 是第几周="+weekNum);
-    }
-
-    private void insertPage() {
+        A a=new A();
+        a.getA()[1]=10;
+        LogUtils.e(String.valueOf(a.getA()[1]));
 
     }
 
 
-
-    private void insert() {
-        context = getContext();
-        long oneYearAgo = System.currentTimeMillis() - ONE_YEAR;
-        MyActivityManager activityManager = MyActivityManager.getInstance();
-        int bookIn = activityManager.BOOKINFRAGMENT;
-        int bookOut = activityManager.BOOKOUTFRAGMENT;
-        LogUtils.e(TAG, String.valueOf(System.currentTimeMillis()));
-        BillDao billDao = BillDao.getInstance(context);
-        ClassesDao classesDao = ClassesDao.getInstance(context);
-        PageDao pageDao = PageDao.getInstance(context);
-        pageDao.deleteAll();
-        billDao.deleteAll();
-        classesDao.deleteAll();
-        Random random = new Random();
-        for (int i = 0; i < 10; i++) {
-            Page page = new Page(i + 1, "我的账单测试" + i);
-            pageDao.insert(page);
+    class A{
+        int []a={1,2,3};
+        public int[] getA() {
+            return a;
         }
-
-        for (int i = 0; i < 100; i++) {
-            int classify = (random.nextBoolean()) ? bookIn : bookOut;
-            String str = "测试" + i;
-            int page = random.nextInt(9) + 1;
-            Classes classes = new Classes(str, classify, page);
-            classesDao.insert(classes);
-        }
-
-        for (int i = 0; i < 2000; i++) {
-            long date = (long) (oneYearAgo + ONE_YEAR * Math.random());
-            float money = random.nextInt(1000) * 0.1f;
-            String remark = "无备注 测试。。。" + i;
-            String str = "测试" + random.nextInt(99);
-            int classify = (random.nextBoolean()) ? bookIn : bookOut;
-            int page = random.nextInt(9) + 1;
-            billDao.insert(new Bill(date, money, remark, str, classify, page));
+        public void setA(int[] a) {
+            this.a = a;
         }
     }
-
-
-    private void traversalBill(List<Bill> billList) {
-        int n = 1;
-        LogUtils.e(TAG, "开始遍历Classes");
-        for (Bill b : billList) {
-            LogUtils.e(TAG, "第" + n);
-            LogUtils.e(TAG, b.toString());
-            LogUtils.e(TAG, b.getClasses());
-            n++;
-        }
-        LogUtils.e(TAG, "结束遍历Classes");
-    }
-
-    private void traversalClasses(List<Classes> classesList) {
-        int n = 1;
-        LogUtils.e(TAG, "开始遍历Classes");
-        for (Classes c : classesList) {
-            LogUtils.e(TAG, "第" + n);
-            LogUtils.e(TAG, c.toString());
-            LogUtils.e(TAG, c.getClasses());
-        }
-        LogUtils.e(TAG, "结束遍历Classes");
-    }
-
-
 }
