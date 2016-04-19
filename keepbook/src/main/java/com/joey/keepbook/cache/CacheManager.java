@@ -493,6 +493,25 @@ public class CacheManager implements ICacheModel {
         chartCache.setWeeksIn(weekIn);
         chartCache.setWeeksOut(weekOut);
         saveChartCacheToPref(chartCache);
+
+        //合计的本月汇总不一致，时间短暂。----------------------待修复
+        float[] monthsIn = chartCache.getMonthsIn();
+        float[] monthsOut = chartCache.getMonthsOut();
+
+        int month = DateManger.getInstance().getMonth();
+        float v1 = monthsIn[month];
+        float v2 = monthsOut[month];
+        float sumMonthIn=0;
+        float sumMonthOut=0;
+        HomeCache tempHomeCache=map.get(count-1);
+        for (int i=0;i<count-1;i++){
+            HomeCache homeCache = map.get(i);
+            sumMonthIn=sumMonthIn+homeCache.getThisMonthIn();
+            sumMonthOut=sumMonthOut+homeCache.getThisMonthOut();
+        }
+        tempHomeCache.setThisMonthIn(v1-sumMonthIn);
+        tempHomeCache.setThisMonthOut(v2 - sumMonthOut);
+        saveHomeCacheToPref(tempHomeCache);
     }
 
     class InnerReadyListener implements IReadyListener {

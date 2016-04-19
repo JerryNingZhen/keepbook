@@ -28,7 +28,7 @@ public class DateManger {
     }
 
     /**
-     * 获取 月
+     * 获取 月 0-11月
      */
     public int getMonth() {
         return time.month;

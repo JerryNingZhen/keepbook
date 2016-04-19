@@ -28,9 +28,8 @@ public class Test extends AndroidTestCase {
     private long today = System.currentTimeMillis();
 
     public void test() {
-        A a=new A();
-        a.getA()[1]=10;
-        LogUtils.e(String.valueOf(a.getA()[1]));
+        int month = DateManger.getInstance().getMonth();
+        LogUtils.e(String.valueOf(month));
 
     }
 

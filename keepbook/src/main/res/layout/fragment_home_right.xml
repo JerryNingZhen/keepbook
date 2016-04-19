@@ -9,7 +9,7 @@
         android:layout_height="match_parent">
         <TextView
             android:id="@+id/tv_home_left_title"
-            android:text="本月汇总"
+            android:text="添加新账本"
             style="@style/home_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
